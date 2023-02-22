@@ -16,6 +16,7 @@
  */
 
 package org.apache.dolphinscheduler.api.service.impl;
+import io.openpixee.security.ZipSecurity;
 
 import static java.util.stream.Collectors.toSet;
 import static org.apache.dolphinscheduler.api.constants.ApiFuncIdentificationConstant.TASK_DEFINITION_MOVE;
@@ -1331,7 +1332,7 @@ public class ProcessDefinitionServiceImpl extends BaseServiceImpl implements Pro
         Map<String, Long> taskNameToCode = new HashMap<>(16);
         Map<String, List<String>> taskNameToUpstream = new HashMap<>(16);
         try (
-                ZipInputStream zIn = new ZipInputStream(file.getInputStream());
+                ZipInputStream zIn = ZipSecurity.createHardenedInputStream(file.getInputStream());
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zIn))) {
             // build process definition
             processDefinition = new ProcessDefinition(projectCode,
